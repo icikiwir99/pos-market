@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+// Fitur Diskon Kasir POS Indowowok
 @section('content')
 <div class="max-w-[1600px] mx-auto px-2 sm:px-4 lg:px-6 py-2" x-data="posApp()" x-init="initPos()">
 
