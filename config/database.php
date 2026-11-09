@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Str;
-use Pdo\Mysql;
 
 return [
 
@@ -60,8 +59,12 @@ return [
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                Mysql::ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA')
+                    ?: (in_array(strtoupper((string) env('DB_SSLMODE', '')), ['REQUIRED', 'VERIFY_CA', 'VERIFY_IDENTITY']) || env('DB_SSL') === 'true'
+                        ? (file_exists(database_path('certs/aiven-ca.pem')) ? database_path('certs/aiven-ca.pem') : null)
+                        : null),
+                PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => env('MYSQL_ATTR_SSL_VERIFY_SERVER_CERT', null),
+            ], fn ($value) => !is_null($value)) : [],
         ],
 
         'mariadb' => [
@@ -80,8 +83,12 @@ return [
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                Mysql::ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA')
+                    ?: (in_array(strtoupper((string) env('DB_SSLMODE', '')), ['REQUIRED', 'VERIFY_CA', 'VERIFY_IDENTITY']) || env('DB_SSL') === 'true'
+                        ? (file_exists(database_path('certs/aiven-ca.pem')) ? database_path('certs/aiven-ca.pem') : null)
+                        : null),
+                PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => env('MYSQL_ATTR_SSL_VERIFY_SERVER_CERT', null),
+            ], fn ($value) => !is_null($value)) : [],
         ],
 
         'pgsql' => [
