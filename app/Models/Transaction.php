@@ -11,43 +11,28 @@ class Transaction extends Model
 
     protected $fillable = [
         'invoice_number',
-        'cashier_id',
+        'user_id',
         'shift_id',
-        'customer_name',
-        'customer_phone',
-        'subtotal',
-        'discount_amount',
-        'tax_amount',
         'total_amount',
-        'payment_method',
-        'payment_amount',
+        'discount_amount',
+        'final_amount',
+        'pay_amount',
         'change_amount',
-        'reference_number',
-        'status',
-        'notes',
+        'payment_method',
     ];
 
-    protected $casts = [
-        'subtotal' => 'decimal:2',
-        'discount_amount' => 'decimal:2',
-        'tax_amount' => 'decimal:2',
-        'total_amount' => 'decimal:2',
-        'payment_amount' => 'decimal:2',
-        'change_amount' => 'decimal:2',
-    ];
-
-    public function cashier()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'cashier_id');
-    }
-
-    public function shift()
-    {
-        return $this->belongsTo(Shift::class);
+        return $this->belongsTo(User::class);
     }
 
     public function items()
     {
         return $this->hasMany(TransactionItem::class);
+    }
+
+    public function shift()
+    {
+        return $this->belongsTo(Shift::class);
     }
 }
